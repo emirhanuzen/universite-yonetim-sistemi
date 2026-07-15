@@ -5,7 +5,7 @@ from database import Base
 class Teacher(Base):
     __tablename__ ="teachers"
     id=Column(Integer,primary_key=True, index=True)
-    name=Column(String, nullable=True)
+    name=Column(String, nullable=False)
     title=Column(String)
     department=Column(String)
     courses=relationship("Course", back_populates="teacher")
@@ -13,14 +13,15 @@ class Teacher(Base):
 class Student(Base):
     __tablename__="students"
     id=Column(Integer,primary_key=True,index=True)
-    name=Column(String,nullable=True)
+    name=Column(String,nullable=False)
+    ogrenci_no=Column(String,nullable=False,unique=True)
     registrations=relationship("StudentCourse", back_populates="student")
 
 
 class Course(Base):
     __tablename__="courses"
     id=Column(Integer,primary_key=True,index=True)
-    name=Column(String,nullable=True)
+    name=Column(String,nullable=False)
     teacher_id=Column(Integer,ForeignKey("teachers.id"))
     teacher=relationship("Teacher", back_populates="courses")
     enrollments=relationship("StudentCourse", back_populates="course")

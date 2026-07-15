@@ -6,7 +6,7 @@ import schemas
 
 app = FastAPI(title="Universite Yonetim Sistemi")
 
-Base.metadata.create_all(bind=engine)   # gecici cozum, Alembic'e gecene kadar
+#Base.metadata.create_all(bind=engine)  
 
 @app.get("/teacher",response_model=list[schemas.TeacherResponse])
 async def get_teacher(db:Session=Depends(get_db)):
@@ -71,7 +71,7 @@ async def get_student(student_id:int,db:Session=Depends(get_db)):
 
 @app.post("/student",response_model=schemas.StudentResponse)
 async def post_student(student:schemas.StudentCreate,db:Session=Depends(get_db)):
-          db_student=models.Student(name=student.name)
+          db_student=models.Student(name=student.name,ogrenci_no=student.ogrenci_no)
           db.add(db_student)
           db.commit()
           db.refresh(db_student)
@@ -83,6 +83,7 @@ async def put_student(student_id:int,student:schemas.StudentCreate,db:Session=De
       if not db_student:
             raise HTTPException(status_code=404,detail="Aradığınız id'de öğrenci yok")
       db_student.name=student.name
+      db_student.ogrenci_no=student.ogrenci_no
       db.commit()
       db.refresh(db_student)
       return db_student

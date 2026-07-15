@@ -17,6 +17,7 @@ class TeacherResponse(BaseModel):
 class StudentResponse(BaseModel):
     id:int
     name:str
+    ogrenci_no:str
     class Config:
         from_attributes=True
 
@@ -36,7 +37,8 @@ class TeacherWithCoursesResponse(TeacherResponse):
     class Config:
         from_attributes=True
 class StudentCreate(BaseModel):
-    name:str         
+    name:str 
+    ogrenci_no:str        
 
 class StudentCourseCreate(BaseModel):
     student_id:int
