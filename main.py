@@ -51,6 +51,12 @@ async def delete_teacher(teacher_id:int,db:Session=Depends(get_db)):
       db.commit()
       return f"{teacher_id} id'li hoca silindi"
 
+@app.get("/teacher_only_course/{teacher_id}",response_model=list[schemas.CourseResponse])
+async def get_with_courseTeacher(teacher_id:int,db:Session=Depends(get_db)):
+      db_teacher=db.query(models.Teacher).filter(models.Teacher.id==teacher_id).first()
+      if not db_teacher:
+            raise HTTPException(status_code=404,detail="Öğretmen bulunamadı")
+      return db_teacher.courses
 
 #student
 
@@ -114,6 +120,13 @@ async def get_course(course_id: int, db: Session = Depends(get_db)):
     if not db_course:
         raise HTTPException(status_code=404, detail="Aradığınız id'de ders yok")
     return db_course
+
+@app.get("/course_only_teacher/{course_id}",respone_model=list[schemas.TeacherResponse])
+async def get_only_teacherwithCourse(course_id:int,db:Session=Depends(get_db)):
+      db_course=db.query(models.Course).filter(models.Course.id==course_id).first()
+      if not db_course:
+            raise HTTPException(status_code=404,detail="Aradığınız id'de ders yok ")
+      return db_course.teacher_id
 
 @app.post("/course", response_model=schemas.CourseResponse)
 async def post_course(course: schemas.CourseCreate, db: Session = Depends(get_db)):
@@ -184,4 +197,22 @@ async def delete_studentCourse(studentCourse_id:int,db:Session=Depends(get_db)):
       return f"{studentCourse_id}'idli eşleşme silindi"
                          
 
+
+#BİR ÖĞRENCİNİN KAYITLI OLDUĞU DERSLERİ GETİR
+@app.get("/student_only_courses/{student_id}",response_model=list[schemas.CourseResponse])
+async def get_only_courses(student_id:int,db:Session=Depends(get_db)):
+      db_student=db.query(models.Student).filter(models.Student.id==student_id).first()
+      if not db_student:
+            raise HTTPException(status_code=404,detail="Öğrenci bulunamadı")
+      dersler=[kayit.course for kayit in db_student.registrations]
+      return dersler
+
+
+#BİR DERSE KAYITLI TÜM ÖĞRENCİLERİ GETİRME 
+@app.get("/course_only_students/{course_id}",response_model=list[schemas.StudentResponse])
+async def get_Course_only_Student(course_id:int,db:Session=Depends(get_db)):
+      db_course=db.query(models.Course).filter(models.Course.id==course_id).first()
+      if not db_course:
+            raise HTTPException(status_code=404,detail="Kurs bulunamadı")
+      ogrenciler=[kayit.student for kayit in db_course.enrollments]
 
