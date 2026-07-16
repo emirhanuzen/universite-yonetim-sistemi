@@ -181,7 +181,7 @@ async def post_studentCourse(studentCourse:schemas.StudentCourseCreate,db:Sessio
       course_id_check=db.query(models.Course).filter(models.Course.id==studentCourse.course_id).first()
       if not course_id_check:
             raise HTTPException(status_code=404,detail="Kayıtlı ders id bulunamadı")           
-      db_studentCourse=models.StudentCourse(student_id=studentCourse.student_id,course_id=studentCourse.course_id)
+      db_studentCourse=models.StudentCourse(student_id=studentCourse.student_id,course_id=studentCourse.course_id,midterm_grade=studentCourse.midterm_grade,final_grade=studentCourse.final_grade)
       db.add(db_studentCourse)
       db.commit()
       db.refresh(db_studentCourse)
@@ -195,6 +195,20 @@ async def delete_studentCourse(studentCourse_id:int,db:Session=Depends(get_db)):
       db.delete(db_student_course)
       db.commit()
       return f"{studentCourse_id}'idli eşleşme silindi"
+
+#Grade'i güncelleme sadece grade
+@app.put("/studentCourse/grade",response_model=schemas.StudentCourseResponse)
+async def put_grade(grade:schemas.StudentCourseCreate,db:Session=Depends(get_db)):       
+      db_studentCourse=db.query(models.StudentCourse).filter(models.StudentCourse.student_id==grade.student_id,
+      models.StudentCourse.course_id==grade.course_id).first()
+      if not db_studentCourse:
+            raise HTTPException(status_code=404,detail="Eşleşme bulunamadı")
+      db_studentCourse.midterm_grade=grade.midterm_grade
+      db_studentCourse.final_grade=grade.final_grade
+      db.commit()
+      db.refresh(db_studentCourse)
+      return db_studentCourse
+      
                          
 
 
