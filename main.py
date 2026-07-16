@@ -121,7 +121,7 @@ async def get_course(course_id: int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="Aradığınız id'de ders yok")
     return db_course
 
-@app.get("/course_only_teacher/{course_id}",respone_model=list[schemas.TeacherResponse])
+@app.get("/course_only_teacher/{course_id}",response_model=list[schemas.TeacherResponse])
 async def get_only_teacherwithCourse(course_id:int,db:Session=Depends(get_db)):
       db_course=db.query(models.Course).filter(models.Course.id==course_id).first()
       if not db_course:
@@ -215,4 +215,5 @@ async def get_Course_only_Student(course_id:int,db:Session=Depends(get_db)):
       if not db_course:
             raise HTTPException(status_code=404,detail="Kurs bulunamadı")
       ogrenciler=[kayit.student for kayit in db_course.enrollments]
+      return ogrenciler
 
