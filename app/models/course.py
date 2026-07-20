@@ -9,4 +9,6 @@ class Course(Base):
     teacher_id=Column(Integer,ForeignKey("teachers.id"),nullable=False)
     teacher=relationship("Teacher", back_populates="courses")
     enrollments=relationship("StudentCourse", back_populates="course")
+    semester_id=Column(Integer,ForeignKey("semesters.id"),nullable=False)
+    semester=relationship("Semester",back_populates="courses")
 

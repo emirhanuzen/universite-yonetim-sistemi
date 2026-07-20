@@ -23,7 +23,7 @@ def get_course_with_teacher(course_id:int,db:Session):
 
 def post_course(course:CourseCreate, db: Session):
     try:    
-        db_course = Course(name=course.name, teacher_id=course.teacher_id)
+        db_course = Course(name=course.name, teacher_id=course.teacher_id,semester_id=course.semester_id)
         db.add(db_course)
         db.commit()
         db.refresh(db_course)
@@ -40,6 +40,7 @@ def put_course(course_id: int, course:CourseCreate, db: Session):
     try:
         db_course.name = course.name
         db_course.teacher_id = course.teacher_id
+        db_course.semester_id=course.semester_id
         db.commit()
         db.refresh(db_course)
         return db_course
@@ -65,3 +66,9 @@ def get_course_with_student(course_id:int,db:Session):
             raise HTTPException(status_code=404,detail="Kurs bulunamadı")
       ogrenciler=[kayit.student for kayit in db_course.enrollments]
       return ogrenciler
+
+def get_course_semester(course_id:int,db:Session):
+    db_course=db.query(Course).filter(Course.id==course_id).first()
+    if not db_course:
+        raise HTTPException()
+    db_course.semester

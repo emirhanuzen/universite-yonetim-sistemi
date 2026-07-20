@@ -4,7 +4,7 @@ from app.dependencies import get_db
 from app.schemas.student import StudentCreate, StudentResponse
 from app.schemas.teacher import TeacherCreate, TeacherResponse
 from app.schemas.course import CourseResponse,CourseCreate
-from app.services import student
+from app.schemas.semester import  SemesterResponse
 from app.services import teacher
 from app.services import course
 
@@ -37,6 +37,10 @@ def delete_course(course_id:int,db:Session=Depends(get_db)):
 @router.get("/course_with_students/{course_id}",response_model=list[StudentResponse])
 def get_with_students(course_id:int,db:Session=Depends(get_db)):
     return course.get_course_with_student(course_id,db)
+
+@router.get("/course_with_semester/{course_id}",response_model=SemesterResponse)
+def get_with_semester(course_id:int,db:Session=Depends(get_db)):
+    return course.get_course_semester(course_id,db)
 
 
 
