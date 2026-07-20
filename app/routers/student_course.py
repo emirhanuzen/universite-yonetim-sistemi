@@ -1,0 +1,27 @@
+from app.services import student_course
+from fastapi import APIRouter, Depends
+from sqlalchemy.orm import Session
+from app.dependencies import get_db
+from app.schemas.student_course import StudentCourseCreate, StudentCourseResponse
+
+router=APIRouter(prefix="/student_course",tags=["Student with courses"])
+
+@router.get("/",response_model=list[StudentCourseResponse])
+def get_student_course_all(db:Session=Depends(get_db)):
+    return student_course.get_student_course_all(db)
+
+@router.get("/{student_course_id}",response_model=StudentCourseResponse)
+def get_student_course_by_id(student_course_id:int,db:Session=Depends(get_db)):
+    return student_course.get_student_course_by_id(student_course_id,db)
+
+@router.post("/",response_model=StudentCourseResponse)
+def post_student_course(student_coursec:StudentCourseCreate,db:Session=Depends(get_db)):
+    return student_course.post_student_course(student_coursec,db)
+
+@router.put("/{student_course_id}",response_model=StudentCourseResponse)
+def put_student_course(student_coursec:StudentCourseCreate,db:Session=Depends(get_db)):
+    return student_course.put_student_course(student_coursec,db)
+
+@router.delete("/{student_course_id}")
+def delete_student_course(student_course_id:int,db:Session=Depends(get_db)):
+    return student_course.delete_student_course(student_course_id,db)
