@@ -22,6 +22,9 @@ def get_student_by_id(student_id:int,db:Session):
 
 def post_student(student:StudentCreate,db:Session):
         try:
+          check_student=db.query(Student).filter(Student.ogrenci_no==student.ogrenci_no).first()
+          if check_student:
+               raise HTTPException(status_code=400,detail="yazdığınız öğrenci no zaten sistemde mevcut")
           db_student=Student(name=student.name,ogrenci_no=student.ogrenci_no)
           db.add(db_student)
           db.commit()
@@ -32,16 +35,19 @@ def post_student(student:StudentCreate,db:Session):
               raise HTTPException(status_code=500,detail=f"Öğrenci Oluşmadı:{str(e)}")  
 
 def put_student(student_id:int,student:StudentCreate,db:Session):          
-    db_student=db.query(Student).filter(Student.id==student_id).first()      
-    if not db_student:
+      db_student=db.query(Student).filter(Student.id==student_id).first()      
+      if not db_student:
             raise HTTPException(status_code=404,detail="Aradığınız id'de öğrenci yok")
-    try:
+      check_student=db.query(Student).filter(Student.ogrenci_no==student.ogrenci_no,Student.id!=student_id).first()
+      if check_student:
+           raise HTTPException(status_code=400,detail="yazdığınız öğrenci no zaten sistemde mevcut")
+      try:
         db_student.name=student.name
         db_student.ogrenci_no=student.ogrenci_no
         db.commit()
         db.refresh(db_student)
         return db_student
-    except Exception as e:
+      except Exception as e:
         db.rollback()
         raise HTTPException(status_code=500,detail=f"Öğrenci güncellenmedi{str(e)}")  
 

@@ -2,6 +2,7 @@ from sqlalchemy.orm import Session
 from fastapi import HTTPException
 from app.models.teacher import Teacher
 from app.schemas.teacher import TeacherCreate,TeacherResponse
+from app.models.course import Course
 
 
 def get_teacher(db:Session,title:str|None=None,department:str|None=None,name:str|None=None):
@@ -50,6 +51,9 @@ def delete_teacher(teacher_id:int,db:Session):
     db_teacher=db.query(Teacher).filter(Teacher.id==teacher_id).first()
     if not db_teacher:
         raise HTTPException(status_code=404,detail="Hoca bulunamadı") 
+    check_have_course=db.query(Course).filter(Course.teacher_id==teacher_id).first()
+    if check_have_course:
+        raise HTTPException(status_code=400,detail="Seçtiğiniz hocanın üstünde ders olduğu için silinemedi")
     try:           
         db.delete(db_teacher)
         db.commit()

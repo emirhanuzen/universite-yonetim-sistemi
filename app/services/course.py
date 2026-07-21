@@ -4,6 +4,7 @@ from sqlalchemy.orm import Session
 from fastapi import HTTPException
 from app.models.teacher import Teacher
 from app.models.student_course import StudentCourse
+from app.models.semester import Semester
 
 def get_course(db: Session,name:str|None=None,teacher_id:int|None=None,semester_id:int|None=None):
     db_course = db.query(Course)
@@ -28,6 +29,10 @@ def get_course_with_teacher(course_id:int,db:Session):
       return db_course.teacher
 
 def post_course(course:CourseCreate, db: Session):
+    #Aynı dönem içerisinde aynı 2 ders olamaz kontrolü
+    check_semester_only_course=db.query(Course).filter(Course.name==course.name,Course.semester_id==course.semester_id).first()
+    if check_semester_only_course:
+        raise HTTPException(status_code=400,detail="Eklemek istediğiniz ders zaten aynı dönem içinde mevcut.")
     try:    
         db_course = Course(name=course.name, teacher_id=course.teacher_id,semester_id=course.semester_id)
         db.add(db_course)
@@ -43,6 +48,10 @@ def put_course(course_id: int, course:CourseCreate, db: Session):
     db_course = db.query(Course).filter(Course.id == course_id).first()
     if not db_course:
         raise HTTPException(status_code=404, detail="Aradığınız id'de ders yok")
+    #Aynı dönem içerisinde aynı 2 ders olamaz kontrolü ,update de aynı kurs id'liyi pas geçer.
+    check_semester_only_course=db.query(Course).filter(Course.name==course.name,Course.semester_id==course.semester_id.id,Course.id!=course_id).first()
+    if check_semester_only_course:
+        raise HTTPException(status_code=400,detail="Eklemek istediğiniz ders zaten aynı dönem içinde mevcut.")
     try:
         db_course.name = course.name
         db_course.teacher_id = course.teacher_id
