@@ -38,7 +38,7 @@ def delete_course(course_id:int,db:Session=Depends(get_db)):
 def get_with_students(course_id:int,db:Session=Depends(get_db)):
     return course.get_course_with_student(course_id,db)
 
-@router.get("/course_with_semester/{course_id}",response_model=SemesterResponse)
+@router.get("/course_only_semester/{course_id}",response_model=SemesterResponse)
 def get_with_semester(course_id:int,db:Session=Depends(get_db)):
     return course.get_course_semester(course_id,db)
 

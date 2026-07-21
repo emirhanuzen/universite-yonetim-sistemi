@@ -71,4 +71,4 @@ def get_course_semester(course_id:int,db:Session):
     db_course=db.query(Course).filter(Course.id==course_id).first()
     if not db_course:
         raise HTTPException()
-    db_course.semester
+    return db_course.semester

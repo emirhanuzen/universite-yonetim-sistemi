@@ -17,10 +17,10 @@ def get_semester_all(db:Session=Depends(get_db)):
 def get_semester_by_id(semester_id:int,db:Session=Depends(get_db)):
     return semester.get_semester_by_id(semester_id,db)
 
-@router.get("/semester_with_courses/{semester_id}",response_model=SemesterResponse)
+@router.get("/semester_only_courses/{semester_id}",response_model=list[CourseResponse])
 def get_with_courses(semester_id:int,db:Session=Depends(get_db)):
     return semester.get_semester_with_courses(semester_id,db)
-
+    
 @router.post("/",response_model=SemesterResponse)
 def post_semester(semesterc:SemesterCreate,db:Session=Depends(get_db)):
     return semester.post_semester(semesterc,db)

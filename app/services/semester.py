@@ -21,7 +21,7 @@ def get_semester_by_id(semester_id:int,db:Session):
 def get_semester_with_courses(semester_id:int,db:Session):
     db_semester=db.query(Semester).filter(Semester.id==semester_id).first()
     if not db_semester:
-        raise HTTPException(status_code=404,detail="Dönem bulunamadı")
+        raise HTTPException(status_code=404,detail="Dönem bulunamadı")    
     return db_semester.courses
 
 def post_semester(semester:SemesterCreate,db:Session):
