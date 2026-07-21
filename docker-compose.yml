@@ -7,7 +7,9 @@ services:
     environment:
       - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/uni_db
     depends_on:
-      - postgres
+     postgres:
+      condition: service_healthy
+
     volumes:
       - .:/app
 
@@ -21,6 +23,11 @@ services:
       - "5432:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
 volumes:
   pgdata:
