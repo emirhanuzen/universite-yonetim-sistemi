@@ -11,8 +11,8 @@ from app.services import course
 router=APIRouter(prefix="/course",tags=["courses"])
 
 @router.get("/",response_model=list[CourseResponse])
-def get_all_course(db:Session=Depends(get_db)):
-    return course.get_course_all(db)    
+def get_all_course(db:Session=Depends(get_db),name:str|None=None,teacher_id:int|None=None,semester_id:int|None=None):
+    return course.get_course(db,name,teacher_id,semester_id)    
 
 @router.get("/{course_id}",response_model=CourseResponse)
 def get_by_id_course(course_id:int,db:Session=Depends(get_db)):

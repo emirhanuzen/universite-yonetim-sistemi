@@ -4,9 +4,15 @@ from app.models.teacher import Teacher
 from app.schemas.teacher import TeacherCreate,TeacherResponse
 
 
-def get_all_teacher(db:Session):
-        db_teacher=db.query(Teacher).all()       
-        return db_teacher
+def get_teacher(db:Session,title:str|None=None,department:str|None=None,name:str|None=None):
+    db_teacher=db.query(Teacher)
+    if name:
+        db_teacher=db_teacher.filter(Teacher.name.ilike(f"%{name}%"))                                   
+    if title:#Filter birebir eşleşme kontrolü
+        db_teacher=db_teacher.filter(Teacher.title==title)
+    if department:#Filter birebir eşleşme kontrolü
+        db_teacher=db_teacher.filter(Teacher.department==department)           
+    return db_teacher.all()
 
 def get_teacher_by_id(teacher_id:int,db:Session):
       db_teacher=db.query(Teacher).filter(Teacher.id==teacher_id).first()

@@ -5,10 +5,13 @@ from app.schemas.student import StudentCreate,StudentResponse
 from app.models.student_course import StudentCourse
 
 
-
-def get_student_all(db:Session):
-      db_student=db.query(Student).all()      
-      return db_student
+def get_student(db:Session,name:str|None=None,no:str|None=None):
+      db_student=db.query(Student)
+      if name:
+           db_student=db_student.filter(Student.name.ilike(f"%{name}%"))
+      if no:
+           db_student=db_student.filter(Student.ogrenci_no==no)
+      return db_student.all()
 
 def get_student_by_id(student_id:int,db:Session):
       db_student=db.query(Student).filter(Student.id==student_id).first()

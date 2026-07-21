@@ -8,8 +8,8 @@ from app.services import student
 router=APIRouter(prefix="/student",tags=["students"])
 
 @router.get("/",response_model=list[StudentResponse])
-def get_all_student(db:Session=Depends(get_db)):
-    return student.get_student_all(db)
+def get_all_student(db:Session=Depends(get_db),name:str|None=None,no:str|None=None):
+    return student.get_student(db,name,no)
 
 @router.get("/{student_id}",response_model=StudentResponse)
 def get_by_id(student_id:int,db:Session=Depends(get_db)):

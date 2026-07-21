@@ -6,11 +6,15 @@ from app.schemas.student import StudentCreate,StudentResponse
 from app.models.course import Course
 from app.models.student import Student
 
-def get_student_course_all(db:Session):
-      db_student_course=db.query(StudentCourse).all()
+def get_student_course(db:Session,student_id:int|None=None,course_id:int|None=None):
+      db_student_course=db.query(StudentCourse)
       if not db_student_course:
             raise HTTPException(status_code=404,detail="Kayıtlı ders eşleşmeleri bulunamadı")
-      return db_student_course
+      if student_id:
+            db_student_course=db_student_course.filter(StudentCourse.student_id==student_id)
+      if course_id:
+            db_student_course=db_student_course.filter(StudentCourse.course_id==course_id)
+      return db_student_course.all()
 
 
 def get_student_course_by_id(studentCourse_id:int,db:Session):   

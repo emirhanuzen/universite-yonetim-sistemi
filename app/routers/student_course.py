@@ -7,8 +7,8 @@ from app.schemas.student_course import StudentCourseCreate, StudentCourseRespons
 router=APIRouter(prefix="/student_course",tags=["Student with courses"])
 
 @router.get("/",response_model=list[StudentCourseResponse])
-def get_student_course_all(db:Session=Depends(get_db)):
-    return student_course.get_student_course_all(db)
+def get_student_course_all(db:Session=Depends(get_db),student_id:int|None=None,course_id:int|None=None):
+    return student_course.get_student_course(db,student_id,course_id)
 
 @router.get("/{student_course_id}",response_model=StudentCourseResponse)
 def get_student_course_by_id(student_course_id:int,db:Session=Depends(get_db)):

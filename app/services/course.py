@@ -5,9 +5,15 @@ from fastapi import HTTPException
 from app.models.teacher import Teacher
 from app.models.student_course import StudentCourse
 
-def get_course_all(db: Session):
-    db_course = db.query(Course).all()
-    return db_course
+def get_course(db: Session,name:str|None=None,teacher_id:int|None=None,semester_id:int|None=None):
+    db_course = db.query(Course)
+    if name:
+        db_course=db_course.filter(Course.name.ilike(f"%{name}%"))
+    if teacher_id:
+        db_course=db_course.filter(Course.teacher_id==teacher_id)    
+    if semester_id:
+        db_course=db_course.filter(Course.semester_id==semester_id)  
+    return db_course.all()
 
 def get_course_by_id(course_id: int, db: Session):
     db_course = db.query(Course).filter(Course.id == course_id).first()
