@@ -4,7 +4,7 @@ from app.models.student import Student
 from app.schemas.student import StudentCreate,StudentResponse
 from app.models.student_course import StudentCourse
 
-
+#name search +filterlar ile öğrenci getirme
 def get_student(db:Session,name:str|None=None,no:str|None=None):
       db_student=db.query(Student)
       if name:
@@ -38,6 +38,7 @@ def put_student(student_id:int,student:StudentCreate,db:Session):
       db_student=db.query(Student).filter(Student.id==student_id).first()      
       if not db_student:
             raise HTTPException(status_code=404,detail="Aradığınız id'de öğrenci yok")
+      #aynı nolu öğrenciyi check ederek ekleme.
       check_student=db.query(Student).filter(Student.ogrenci_no==student.ogrenci_no,Student.id!=student_id).first()
       if check_student:
            raise HTTPException(status_code=400,detail="yazdığınız öğrenci no zaten sistemde mevcut")

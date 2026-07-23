@@ -51,6 +51,7 @@ def delete_teacher(teacher_id:int,db:Session):
     db_teacher=db.query(Teacher).filter(Teacher.id==teacher_id).first()
     if not db_teacher:
         raise HTTPException(status_code=404,detail="Hoca bulunamadı") 
+    #Öğretmenin üstünde kurs varsa silinemez .Kontrol değişkeni ile yapılır.
     check_have_course=db.query(Course).filter(Course.teacher_id==teacher_id).first()
     if check_have_course:
         raise HTTPException(status_code=400,detail="Seçtiğiniz hocanın üstünde ders olduğu için silinemedi")
@@ -62,7 +63,7 @@ def delete_teacher(teacher_id:int,db:Session):
          db.rollback()
          raise HTTPException(status_code=500,detail=f"Hoca silinemedi:{str(e)}")
 
-
+#Öğretmen ile ona ait kursları listele
 def get_teacher_with_course(teacher_id:int,db:Session):
       db_teacher=db.query(Teacher).filter(Teacher.id==teacher_id).first()
       if not db_teacher:

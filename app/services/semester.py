@@ -5,25 +5,25 @@ from app.schemas.semester import SemesterCreate,SemesterResponse
 from app.models.course import Course
 from app.schemas.course import CourseResponse
 
-
+#Bütün dönemleri listeler.
 def get_semester_all(db:Session):
     db_semester=db.query(Semester).all()
     if not db_semester:
         raise   HTTPException(status_code=404,detail="Kyıtlı dönem bulunamadı")
     return db_semester
-
+#Dönemi id'ye göre çağırır.
 def get_semester_by_id(semester_id:int,db:Session):
     db_semester=db.query(Semester).filter(Semester.id==semester_id).first()
     if not db_semester:
         raise HTTPException(status_code=404,detail="Aradığınız id'de  dönem bulunamadı")
     return db_semester
-
+#Dönemin courslarını listeler.
 def get_semester_with_courses(semester_id:int,db:Session):
     db_semester=db.query(Semester).filter(Semester.id==semester_id).first()
     if not db_semester:
         raise HTTPException(status_code=404,detail="Dönem bulunamadı")    
     return db_semester.courses
-
+#Dönem kayıt eder.
 def post_semester(semester:SemesterCreate,db:Session):
     db_semester=Semester(name=semester.name,start_date=semester.start_date)
     try:
@@ -34,13 +34,14 @@ def post_semester(semester:SemesterCreate,db:Session):
     except Exception as e:
         db.rollback()
         raise HTTPException(status_code=500,detail=f"Dönem kayıt edilmedi:{str(e)}")
- 
+#Dönem Günceller 
 def put_semester(semester_id:int,semester:SemesterCreate,db:Session):
     db_semester=db.query(Semester).filter(Semester.id==semester_id).first()
     if not db_semester:
         raise HTTPException(status_code=404,detail="Aradığınız dönem bulunamadı")
     db_semester.name=semester.name
     db_semester.start_date=semester.start_date
+   #Transcation db kayıt aşamasında hata alırsa rollback'le başa döner.
     try:
         db.commit()
         db.refresh(db_semester)
@@ -49,7 +50,7 @@ def put_semester(semester_id:int,semester:SemesterCreate,db:Session):
         db.rollback()
         raise HTTPException(status_code=500,detail="Dönem güncellenemedi")
            
-
+#Dönemi siler.
 def delete_semester(semester_id:int,db:Session):
     db_semester=db.query(Semester).filter(Semester.id==semester_id).first()
     if not db_semester:

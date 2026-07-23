@@ -23,7 +23,7 @@ from pathlib import Path
 sys.path.append(str(Path(__file__).resolve().parents[1]))
 
 from app.db.database import Base
-from app.models import teacher,course,student,student_course,semester  # Teacher, Student, Course, StudentCourse burada tanimli
+from app.models import teacher,course,student,student_course,semester,attendance  # Teacher, Student, Course, StudentCourse burada tanimli
 #EKLEDĞİMİZ YER 
 #TARGET_METADATA BASE.METADATA İLE DEĞİŞTİ
 target_metadata = Base.metadata

@@ -11,3 +11,4 @@ class StudentCourse(Base):
     final_grade=Column(Integer,nullable=True)
     student=relationship("Student",back_populates="registrations")
     course=relationship("Course",back_populates="enrollments")
+    attendances=relationship("Attendance",back_populates="student_course")
