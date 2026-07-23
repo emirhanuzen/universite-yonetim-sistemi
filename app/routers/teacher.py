@@ -1,14 +1,15 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
-from app.dependencies import get_db
+from app.dependencies import get_db,get_current_user
 from app.schemas.teacher import TeacherCreate, TeacherResponse,TeacherWithCoursesResponse
 from app.schemas.course import CourseResponse
 from app.services import teacher
+ 
 
 router=APIRouter(prefix="/teacher",tags=["teacher"])
 
 @router.get("/",response_model=list[TeacherResponse])
-def get_teacher(db:Session=Depends(get_db),title:str|None=None,department:str|None=None,name:str |None=None):
+def get_teacher(db:Session=Depends(get_db),title:str|None=None,department:str|None=None,name:str |None=None,current_user=Depends(get_current_user)):
     return teacher.get_teacher(db,title,department,name)
 
 @router.get("/{teacher_id}",response_model=TeacherResponse)
