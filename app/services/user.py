@@ -19,14 +19,14 @@ def create_user(db:Session,user:UserCreate):
         db.rollback()
         raise HTTPException(status_code=500,detail=f"Kullanıcı kayıt edilmedi:{str(e)}")
 
-def login_user(db:Session,user:UserCreate):
-    check_username=db.query(User).filter(User.username==user.username).first()
+def login_user(db:Session,username:str,password:str):
+    check_username=db.query(User).filter(User.username==username).first()
     if not check_username:
         raise HTTPException(status_code=404,detail="Kayıtlı kullanıcı adı bulunamadı")
-    check_password=verify_password(user.password,check_username.hashed_password) 
+    check_password=verify_password(password,check_username.hashed_password) 
     if not check_password:
-        raise HTTPException(status_code=500,detail="Şifre yanlış giriş yapılmadı")   
+        raise HTTPException(status_code=401,detail="Şifre yanlış giriş yapılmadı")   
 
     token=create_access_token({"sub":check_username.username})
-    return {"accses_token":token,"token_type":"bearer"} 
+    return {"access_token":token,"token_type":"bearer"} 
 
