@@ -1,7 +1,8 @@
 from app.services import student_course
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
-from app.dependencies import get_db,get_current_user
+from app.dependencies import get_db,get_current_user,get_current_admin_user
+from app.models.user import User
 from app.schemas.student_course import StudentCourseCreate, StudentCourseResponse
 from app.schemas.attendances import AttendancesResponse
 

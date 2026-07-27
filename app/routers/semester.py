@@ -1,7 +1,8 @@
 
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
-from app.dependencies import get_db,get_current_user
+from app.dependencies import get_db,get_current_user,get_current_admin_user
+from app.models.user import User
 from app.services import semester
 from app.models.semester import Semester
 from app.schemas.semester import SemesterCreate,SemesterResponse
@@ -29,3 +30,6 @@ def post_semester(semesterc:SemesterCreate,db:Session=Depends(get_db),current_us
 def put_semester(semester_id:int,semesterc:SemesterCreate,db:Session=Depends(get_db),current_user=Depends(get_current_user)):
     return semester.put_semester(semester_id,semesterc,db)
 
+@router.delete("/{semester_id}")
+def delete_semester(semester_id:int,db:Session=Depends(get_db),admin:User=Depends(get_current_admin_user)):
+    return semester.delete_semester(semester_id,db)

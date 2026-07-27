@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
-from app.dependencies import get_db,get_current_user
+from app.dependencies import get_db,get_current_user,get_current_admin_user
+from app.models.user import User
 from app.schemas.student import StudentCreate, StudentResponse
 from app.schemas.course import CourseResponse
 from app.services import student
@@ -28,7 +29,7 @@ def delete_student(student_id:int,db:Session=Depends(get_db),current_user:str=De
     return student.delete_student(student_id,db)
 
 @router.get("/get_with_courses/{student_id}",response_model=list[CourseResponse])
-def get_with_courses(student_id:int,db:Session=Depends(get_db),current_user:str=Depends(get_current_user)):
+def get_with_courses(student_id:int,db:Session=Depends(get_db),admin:User=Depends(get_current_admin_user)):
     return student.get_with_courses(student_id,db)
 
 

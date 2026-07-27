@@ -1,12 +1,14 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
-from app.dependencies import get_db,get_current_user
+from app.dependencies import get_db,get_current_user,get_current_admin_user
+from app.models.user import User
 from app.schemas.attendances import AttendancesResponse,CreateAttendances
 from app.schemas.student_course import StudentCourseCreate,StudentCourseResponse
 from app.schemas.course import CourseResponse,CourseCreate
 from app.schemas.semester import  SemesterResponse
 from app.services import attendances
 from app.models.student_course import StudentCourse
+
 
 router=APIRouter(prefix="/attendances",tags=["attendances"])
 
@@ -28,5 +30,5 @@ def put_attendances(attendances_id:int,attendancesc:CreateAttendances,db:Session
     return attendances.put_attendances(db,attendancesc,attendances_id)
 
 @router.delete("/{attendances_id}")
-def delete_attendances(attendances_id:int,db:Session=Depends(get_db),current_user:str=Depends(get_current_user)):
+def delete_attendances(attendances_id:int,db:Session=Depends(get_db),admin:User=Depends(get_current_admin_user)):
     return attendances.delete_attendances(db,attendances_id)
