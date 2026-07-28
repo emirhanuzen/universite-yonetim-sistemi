@@ -27,7 +27,7 @@ def login_user(db:Session,username:str,password:str):
     if not check_password:
         raise HTTPException(status_code=401,detail="Şifre yanlış giriş yapılmadı")   
 
-    token=create_access_token({"sub":check_username.username})
+    token=create_access_token({"sub":check_username.username,"role":check_username.role})
     return {"access_token":token,"token_type":"bearer"} 
 
 def promote_user(user_id:int,db:Session):

@@ -4,6 +4,8 @@ services:
     build: .
     ports:
       - "8000:8000"
+    env_file:
+      - .env   
     environment:
       - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/uni_db
     depends_on:

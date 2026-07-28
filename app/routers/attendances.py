@@ -14,19 +14,19 @@ router=APIRouter(prefix="/attendances",tags=["attendances"])
 
 
 @router.get("/",response_model=list[AttendancesResponse])
-def get_attendances(db:Session=Depends(get_db),attendances_id:int|None=None,current_user:str=Depends(get_current_user)):
+def get_attendances(db:Session=Depends(get_db),attendances_id:int|None=None,current_user:dict=Depends(get_current_user)):
     return attendances.get_attendances(db,attendances_id)
 
 @router.get("/{attendances_id}",response_model=AttendancesResponse)
-def get_attendances_by_id(db:Session=Depends(get_db),attendances_id:int|None=None,current_user:str=Depends(get_current_user)):
+def get_attendances_by_id(db:Session=Depends(get_db),attendances_id:int|None=None,current_user:dict=Depends(get_current_user)):
     return attendances.get_attendances_by_id(db,attendances_id)
 
 @router.post("/",response_model=AttendancesResponse)
-def post_attendances(attendancesc:CreateAttendances,db:Session=Depends(get_db),current_user:str=Depends(get_current_user)):
+def post_attendances(attendancesc:CreateAttendances,db:Session=Depends(get_db),current_user:dict=Depends(get_current_user)):
     return attendances.post_attendances(db,attendancesc)
 
 @router.put("/{attendances_id}",response_model=AttendancesResponse)
-def put_attendances(attendances_id:int,attendancesc:CreateAttendances,db:Session=Depends(get_db),current_user:str=Depends(get_current_user)):
+def put_attendances(attendances_id:int,attendancesc:CreateAttendances,db:Session=Depends(get_db),current_user:dict=Depends(get_current_user)):
     return attendances.put_attendances(db,attendancesc,attendances_id)
 
 @router.delete("/{attendances_id}")

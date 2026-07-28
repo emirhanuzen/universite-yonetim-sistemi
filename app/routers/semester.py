@@ -11,23 +11,23 @@ from app.schemas.course import CourseResponse
 router=APIRouter(prefix="/semester",tags=["Semesters"])
 
 @router.get("/",response_model=list[SemesterResponse])
-def get_semester_all(db:Session=Depends(get_db),current_user=Depends(get_current_user)):
+def get_semester_all(db:Session=Depends(get_db),current_user:dict=Depends(get_current_user)):
     return semester.get_semester_all(db)
 
 @router.get("/{semester_id}",response_model=SemesterResponse)
-def get_semester_by_id(semester_id:int,db:Session=Depends(get_db),current_user=Depends(get_current_user)):
+def get_semester_by_id(semester_id:int,db:Session=Depends(get_db),current_user:dict=Depends(get_current_user)):
     return semester.get_semester_by_id(semester_id,db)
 
 @router.get("/semester_only_courses/{semester_id}",response_model=list[CourseResponse])
-def get_with_courses(semester_id:int,db:Session=Depends(get_db),current_user=Depends(get_current_user)):
+def get_with_courses(semester_id:int,db:Session=Depends(get_db),current_user:dict=Depends(get_current_user)):
     return semester.get_semester_with_courses(semester_id,db)
     
 @router.post("/",response_model=SemesterResponse)
-def post_semester(semesterc:SemesterCreate,db:Session=Depends(get_db),current_user=Depends(get_current_user)):
+def post_semester(semesterc:SemesterCreate,db:Session=Depends(get_db),current_user:dict=Depends(get_current_user)):
     return semester.post_semester(semesterc,db)
 
 @router.put("/{semester_id}",response_model=SemesterResponse)
-def put_semester(semester_id:int,semesterc:SemesterCreate,db:Session=Depends(get_db),current_user=Depends(get_current_user)):
+def put_semester(semester_id:int,semesterc:SemesterCreate,db:Session=Depends(get_db),current_user:dict=Depends(get_current_user)):
     return semester.put_semester(semester_id,semesterc,db)
 
 @router.delete("/{semester_id}")

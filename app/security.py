@@ -1,3 +1,12 @@
+
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
+SECRET_KEY = os.environ.get("SECRET_KEY")
+ALGORITHM = "HS256"
+
 from passlib.context import CryptContext
 from datetime import datetime
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
@@ -10,9 +19,6 @@ def verify_password(plain_password: str, hashed_password: str) -> bool:
 
 from datetime import datetime, timedelta
 from jose import jwt
-
-SECRET_KEY = "cok-gizli-bir-anahtar-bunu-kimseyle-paylasma"
-ALGORITHM = "HS256"
 
 def create_access_token(data: dict):
     to_encode = data.copy()
