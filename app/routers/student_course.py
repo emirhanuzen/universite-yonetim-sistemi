@@ -30,6 +30,6 @@ def put_student_course(student_coursec:StudentCourseCreate,db:Session=Depends(ge
     return student_course.put_student_course(student_coursec,db)
 
 @router.delete("/{student_course_id}")
-def delete_student_course(student_course_id:int,db:Session=Depends(get_db),current_user:dict=Depends(get_current_user)):
+def delete_student_course(student_course_id:int,db:Session=Depends(get_db),admin:dict=Depends(get_current_admin_user)):
     return student_course.delete_student_course(student_course_id,db)
 

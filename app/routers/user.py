@@ -31,3 +31,7 @@ def delete_user(user_id:int,db:Session=Depends(get_db),admin:User=Depends(get_cu
 @router.get("/",response_model=list[UserResponse])
 def get_user(username:str|None=None,db:Session=Depends(get_db),admin:User=Depends(get_current_admin_user)):
     return user.get_user(db,username)
+
+@router.put("/user_set_role",response_model=UserResponse)
+def user_set_role(user_id:int,new_role:str,db:Session=Depends(get_db),admin:dict=Depends(get_current_admin_user)):
+    return user.user_set_role(user_id,new_role,db)

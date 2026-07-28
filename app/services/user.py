@@ -77,3 +77,17 @@ def get_user(db:Session,username:str|None=None):
     if not result:
             raise HTTPException(status_code=404,detail="Kullanıcı bulunamadı")
     return result
+
+def user_set_role(user_id:int,new_role:str,db:Session):
+    db_user=db.query(User).filter(User.id==user_id).first()
+    if not db_user:
+        raise HTTPException(status_code=404,detail="Kullanıcı bulunamadı")
+    try:
+        db_user.role=new_role
+        db.commit()
+        db.refresh(db_user)
+        return db_user
+    except Exception as e:
+        db.rollback()
+        raise HTTPException(status_code=500,detail="Rol değiştirilmedi")
+

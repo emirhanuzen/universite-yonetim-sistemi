@@ -29,7 +29,7 @@ def delete_student(student_id:int,db:Session=Depends(get_db),current_user:dict=D
     return student.delete_student(student_id,db)
 
 @router.get("/get_with_courses/{student_id}",response_model=list[CourseResponse])
-def get_with_courses(student_id:int,db:Session=Depends(get_db),admin:User=Depends(get_current_admin_user)):
+def get_with_courses(student_id:int,db:Session=Depends(get_db),admin:dict=Depends(get_current_admin_user)):
     return student.get_with_courses(student_id,db)
 
 

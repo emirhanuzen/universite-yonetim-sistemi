@@ -31,5 +31,5 @@ def put_semester(semester_id:int,semesterc:SemesterCreate,db:Session=Depends(get
     return semester.put_semester(semester_id,semesterc,db)
 
 @router.delete("/{semester_id}")
-def delete_semester(semester_id:int,db:Session=Depends(get_db),admin:User=Depends(get_current_admin_user)):
+def delete_semester(semester_id:int,db:Session=Depends(get_db),admin:dict=Depends(get_current_admin_user)):
     return semester.delete_semester(semester_id,db)

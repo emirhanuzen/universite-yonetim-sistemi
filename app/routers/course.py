@@ -32,7 +32,7 @@ def put_course(course_id:int,courseC:CourseCreate,db:Session=Depends(get_db),cur
     return course.put_course(course_id,courseC,db)
 
 @router.delete("/{course_id}")
-def delete_course(course_id:int,db:Session=Depends(get_db),admin:User=Depends(get_current_admin_user)):
+def delete_course(course_id:int,db:Session=Depends(get_db),admin:dict=Depends(get_current_admin_user)):
     return course.delete_course(course_id,db)
 
 @router.get("/course_with_students/{course_id}",response_model=list[StudentResponse])

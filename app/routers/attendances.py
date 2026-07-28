@@ -30,5 +30,5 @@ def put_attendances(attendances_id:int,attendancesc:CreateAttendances,db:Session
     return attendances.put_attendances(db,attendancesc,attendances_id)
 
 @router.delete("/{attendances_id}")
-def delete_attendances(attendances_id:int,db:Session=Depends(get_db),admin:User=Depends(get_current_admin_user)):
+def delete_attendances(attendances_id:int,db:Session=Depends(get_db),admin:dict=Depends(get_current_admin_user)):
     return attendances.delete_attendances(db,attendances_id)

@@ -30,5 +30,5 @@ def put_teacher(teacher_id:int,teacherc:TeacherCreate,db:Session=Depends(get_db)
     return teacher.put_teacher(teacher_id,teacherc,db)
 
 @router.delete("/{teacher_id}")
-def delete_teacher(teacher_id:int,db:Session=Depends(get_db),admin:User=Depends(get_current_admin_user)):
+def delete_teacher(teacher_id:int,db:Session=Depends(get_db),admin:dict=Depends(get_current_admin_user)):
     return teacher.delete_teacher(teacher_id,db)
