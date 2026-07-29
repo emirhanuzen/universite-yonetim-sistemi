@@ -22,11 +22,11 @@ def get_teacher_with_course(teacher_id:int,db:Session=Depends(get_db),current_us
     return teacher.get_teacher_with_course(teacher_id,db)
 
 @router.post("/",response_model=TeacherResponse)
-def post_teacher(teacherc:TeacherCreate,db:Session=Depends(get_db),current_user:dict=Depends(get_current_user)):
+def post_teacher(teacherc:TeacherCreate,db:Session=Depends(get_db),admin:dict=Depends(get_current_admin_user)):
     return teacher.post_teacher(teacherc,db)
 
 @router.put("/{teacher_id}",response_model=TeacherResponse)
-def put_teacher(teacher_id:int,teacherc:TeacherCreate,db:Session=Depends(get_db),current_user:dict=Depends(get_current_user)):
+def put_teacher(teacher_id:int,teacherc:TeacherCreate,db:Session=Depends(get_db),admin:dict=Depends(get_current_admin_user)):
     return teacher.put_teacher(teacher_id,teacherc,db)
 
 @router.delete("/{teacher_id}")

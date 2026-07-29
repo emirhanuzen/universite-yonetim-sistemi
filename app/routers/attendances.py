@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
-from app.dependencies import get_db,get_current_user,get_current_admin_user
+from app.dependencies import get_db,get_current_user,get_current_admin_user,get_current_teacher_user,get_current_student_user
 from app.models.user import User
 from app.schemas.attendances import AttendancesResponse,CreateAttendances
 from app.schemas.student_course import StudentCourseCreate,StudentCourseResponse
@@ -22,13 +22,13 @@ def get_attendances_by_id(db:Session=Depends(get_db),attendances_id:int|None=Non
     return attendances.get_attendances_by_id(db,attendances_id)
 
 @router.post("/",response_model=AttendancesResponse)
-def post_attendances(attendancesc:CreateAttendances,db:Session=Depends(get_db),current_user:dict=Depends(get_current_user)):
+def post_attendances(attendancesc:CreateAttendances,db:Session=Depends(get_db),teacher:dict=Depends(get_current_teacher_user)):
     return attendances.post_attendances(db,attendancesc)
 
 @router.put("/{attendances_id}",response_model=AttendancesResponse)
-def put_attendances(attendances_id:int,attendancesc:CreateAttendances,db:Session=Depends(get_db),current_user:dict=Depends(get_current_user)):
+def put_attendances(attendances_id:int,attendancesc:CreateAttendances,db:Session=Depends(get_db),teacher:dict=Depends(get_current_teacher_user)):
     return attendances.put_attendances(db,attendancesc,attendances_id)
 
 @router.delete("/{attendances_id}")
-def delete_attendances(attendances_id:int,db:Session=Depends(get_db),admin:dict=Depends(get_current_admin_user)):
+def delete_attendances(attendances_id:int,db:Session=Depends(get_db),teacher:dict=Depends(get_current_teacher_user)):
     return attendances.delete_attendances(db,attendances_id)

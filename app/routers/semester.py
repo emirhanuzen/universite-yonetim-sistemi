@@ -23,11 +23,11 @@ def get_with_courses(semester_id:int,db:Session=Depends(get_db),current_user:dic
     return semester.get_semester_with_courses(semester_id,db)
     
 @router.post("/",response_model=SemesterResponse)
-def post_semester(semesterc:SemesterCreate,db:Session=Depends(get_db),current_user:dict=Depends(get_current_user)):
+def post_semester(semesterc:SemesterCreate,db:Session=Depends(get_db),admin:dict=Depends(get_current_admin_user)):
     return semester.post_semester(semesterc,db)
 
 @router.put("/{semester_id}",response_model=SemesterResponse)
-def put_semester(semester_id:int,semesterc:SemesterCreate,db:Session=Depends(get_db),current_user:dict=Depends(get_current_user)):
+def put_semester(semester_id:int,semesterc:SemesterCreate,db:Session=Depends(get_db),admin:dict=Depends(get_current_admin_user)):
     return semester.put_semester(semester_id,semesterc,db)
 
 @router.delete("/{semester_id}")

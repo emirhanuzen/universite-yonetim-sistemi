@@ -24,11 +24,11 @@ def get_with_teacher(course_id:int,db:Session=Depends(get_db),current_user:dict=
     return course.get_course_with_teacher(course_id,db)
 
 @router.post("/",response_model=CourseResponse)
-def post_course(courseC:CourseCreate,db:Session=Depends(get_db),current_user:dict=Depends(get_current_user)):
+def post_course(courseC:CourseCreate,db:Session=Depends(get_db),admin:dict=Depends(get_current_admin_user)):
     return course.post_course(courseC,db)
 
 @router.put("/{course_id}",response_model=CourseResponse)
-def put_course(course_id:int,courseC:CourseCreate,db:Session=Depends(get_db),current_user:dict=Depends(get_current_user)):
+def put_course(course_id:int,courseC:CourseCreate,db:Session=Depends(get_db),admin:dict=Depends(get_current_admin_user)):
     return course.put_course(course_id,courseC,db)
 
 @router.delete("/{course_id}")
@@ -40,7 +40,7 @@ def get_with_students(course_id:int,db:Session=Depends(get_db),current_user:dict
     return course.get_course_with_student(course_id,db)
 
 @router.get("/course_only_semester/{course_id}",response_model=SemesterResponse)
-def get_with_semester(course_id:int,db:Session=Depends(get_db),current_user:dict=Depends(get_current_user)):
+def get_with_semester(course_id:int,db:Session=Depends(get_db),current_user=Depends(get_current_user)):
     return course.get_course_semester(course_id,db)
 
 

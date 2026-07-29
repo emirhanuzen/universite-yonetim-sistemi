@@ -27,5 +27,14 @@ def get_current_admin_user(current_user:dict=Depends(get_current_user)):
     if current_user["role"]!="admin":
          raise HTTPException(status_code=403, detail="Yetkisiz işlem")
     return current_user    
-    
+
+def get_current_teacher_user(current_user:dict=Depends(get_current_user)):
+    if current_user["role"] not in["teacher","admin"]:
+        raise HTTPException(status_code=403,detail="Öğretmen yetkisine sahip değilsiniz") 
+    return current_user
+
+def get_current_student_user(current_user:dict=Depends(get_current_user)):
+    if current_user["role"]not in ["student,admin"]:
+        raise HTTPException(status_code=403,detail="Öğrenci yetkisine sahip değilsiniz")
+    return current_user
       

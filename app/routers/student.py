@@ -17,19 +17,19 @@ def get_by_id(student_id:int,db:Session=Depends(get_db),current_user:dict=Depend
     return student.get_student_by_id(student_id,db)
 
 @router.post("/",response_model=StudentResponse)
-def post_student(studentc:StudentCreate,db:Session=Depends(get_db),current_user:dict=Depends(get_current_user)):
+def post_student(studentc:StudentCreate,db:Session=Depends(get_db),admin:dict=Depends(get_current_admin_user)):
     return student.post_student(studentc,db)
 
 @router.put("/{student_id}",response_model=StudentResponse)
-def put_student(student_id:int,studentc:StudentCreate,db:Session=Depends(get_db),current_user:dict=Depends(get_current_user)):
+def put_student(student_id:int,studentc:StudentCreate,db:Session=Depends(get_db),admin:dict=Depends(get_current_admin_user)):
     return student.put_student(student_id,studentc,db)
 
 @router.delete("/{stduent_İd}")
-def delete_student(student_id:int,db:Session=Depends(get_db),current_user:dict=Depends(get_current_user)):
+def delete_student(student_id:int,db:Session=Depends(get_db),admin:dict=Depends(get_current_admin_user)):
     return student.delete_student(student_id,db)
 
 @router.get("/get_with_courses/{student_id}",response_model=list[CourseResponse])
-def get_with_courses(student_id:int,db:Session=Depends(get_db),admin:dict=Depends(get_current_admin_user)):
+def get_with_courses(student_id:int,db:Session=Depends(get_db),current_user:dict=Depends(get_current_user)):
     return student.get_with_courses(student_id,db)
 
 
