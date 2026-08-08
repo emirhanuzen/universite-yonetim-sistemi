@@ -3,7 +3,7 @@
 FastAPI, SQLAlchemy ve Alembic ile geliştirilmiş, hoca-öğrenci-ders yönetimini sağlayan, JWT tabanlı güvenlik katmanına sahip bir backend API'si. PostgreSQL veritabanı ile Docker üzerinde, katmanlı (layered) bir mimariyle çalışacak şekilde yapılandırılmıştır.
 ## Mimari
 
-![Mimari Şema](docs/architecture.svg)
+![Mimari Şema](docs/university_management_system_architecture.svg)
 
 İstemci (web/mobil), JWT token ile FastAPI uygulamasına bağlanır. FastAPI, router → service → model katmanlarından oluşur ve SQLAlchemy üzerinden PostgreSQL'e erişir. Her iki servis de (api + postgres), Docker Compose ile, healthcheck destekli olarak birlikte çalışır.
 ## Özellikler
